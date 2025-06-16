@@ -1,0 +1,3 @@
+# .gitignore
+.venv/
+exercicio_18-06/.env
