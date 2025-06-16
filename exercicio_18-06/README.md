@@ -85,7 +85,7 @@ Siga os passos abaixo para configurar e rodar o projeto localmente.
 ### 1. Clonar o Repositório
 
 ```bash
-git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+git clone [https://github.com/osmanybf/CiberIA_I2A2/tree/main/exercicio_18-06]
 cd seu-repositorio
 ```
 
@@ -117,23 +117,26 @@ streamlit run app.py
 
 Isso abrirá automaticamente uma nova aba no seu navegador padrão (geralmente em http://localhost:8501), exibindo a interface do seu agente de IA.
 
-💡 Como Usar
+## 💡 Como Usar
 Ao abrir a interface no seu navegador:
 
-Carregue os Dados Primeiro: Na caixa de texto, digite: Carregar os dados dos arquivos CSV. e clique em "Perguntar". Aguarde a confirmação de que os dados foram carregados na memória. Esta etapa é fundamental para que o agente possa acessar as informações.
-Faça suas Perguntas: Após a confirmação do carregamento, comece a interagir com o agente fazendo perguntas em linguagem natural sobre os dados das notas fiscais.
-Aqui estão alguns exemplos de perguntas que você pode fazer:
+### Carregue os Dados Primeiro: 
+    Na caixa de texto, digite: Carregar os dados dos arquivos CSV. e clique em "Perguntar". Aguarde a confirmação de que os dados foram carregados na memória. Esta etapa é fundamental para que o agente possa acessar as informações.
+### Faça suas Perguntas: 
+    Após a confirmação do carregamento, comece a interagir com o agente fazendo perguntas em linguagem natural sobre os dados das notas fiscais.
+### Aqui estão alguns exemplos de perguntas que você pode fazer:
 
-Qual o fornecedor que teve maior montante recebido?
-Qual item teve maior volume entregue (em quantidade)?
-Quantas notas fiscais foram emitidas?
-Qual o valor total de todas as notas fiscais?
-Liste os 5 itens mais vendidos por quantidade.
-Qual a data da nota fiscal de maior valor?
-⚠️ Aviso de Segurança (Uso de eval())
-Este projeto, para fins de demonstração e aprendizado, utiliza a função Python eval() para executar as consultas Pandas geradas pelo LLM. É importante notar que o uso de eval() com entrada não confiável (como a saída de um LLM) é inerentemente inseguro e pode levar à execução de código malicioso.
+    - Qual o fornecedor que teve maior montante recebido?
+    - Qual item teve maior volume entregue (em quantidade)?
+    - Quantas notas fiscais foram emitidas?
+    - Qual o valor total de todas as notas fiscais?
+    - Liste os 5 itens mais vendidos por quantidade.
+    - Qual a data da nota fiscal de maior valor?
 
-Para uma aplicação em ambiente de produção, é altamente recomendável substituir a lógica baseada em eval() por uma abordagem mais segura, como:
+## ⚠️ Aviso de Segurança (Uso de eval())
+Este projeto, para fins de demonstração e aprendizado, utiliza a função Python `eval()` para executar as consultas Pandas geradas pelo LLM. É importante notar que o uso de `eval()` com entrada não confiável (como a saída de um LLM) é inerentemente inseguro e pode levar à execução de código malicioso.
 
-Parsing Controlado: Implementar um mecanismo que converte a intenção da linguagem natural em operações Pandas seguras e pré-definidas.
-Ferramentas Estruturadas: Definir ferramentas LangChain que aceitam parâmetros específicos (por exemplo, nome da coluna, tipo de agregação) em vez de strings de código arbitrárias.
+Para uma aplicação em ambiente de produção, é altamente recomendável substituir a lógica baseada em `eval()` por uma abordagem mais segura, como:
+
+Parsing Controlado: Implementar um mecanismo que converte a intenção da linguagem natural em operações `Pandas` seguras e pré-definidas.
+Ferramentas Estruturadas: Definir ferramentas `LangChain` que aceitam parâmetros específicos (por exemplo, nome da coluna, tipo de agregação) em vez de strings de código arbitrárias.

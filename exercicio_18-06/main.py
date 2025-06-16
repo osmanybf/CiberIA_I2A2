@@ -35,6 +35,7 @@ def tool_carregar_dados_csvs(arg: str = None) -> str: # <--- MUDANÇA AQUI: Adic
     if df_c is not None and df_i is not None:
         global_df_cabecalho = df_c
         global_df_itens = df_i
+        print(global_df_itens.columns) # <--- MUDANÇA AQUI: Adicionada impressão das colunas de global_df_itens
         return "Arquivos CSV de cabeçalho e itens carregados com sucesso na memória."
     else:
         return "Erro ao carregar os arquivos CSV. Verifique os caminhos e permissões."
@@ -114,7 +115,16 @@ tools = [
     Tool(
         name="Consultar Itens NFs",
         func=tool_consultar_itens,
-        description="Útil para responder perguntas sobre os itens das notas fiscais. Recebe uma string que é uma operação válida do Pandas no DataFrame 'global_df_itens'. Por exemplo: 'global_df_itens['Quantidade'].sum()', 'global_df_itens['ItemDescricao'].value_counts().head(5)'. Lembre-se de usar 'global_df_itens'."
+        description=(
+            "Útil para responder perguntas sobre os itens das notas fiscais. "
+            "Recebe uma string que é uma operação válida do Pandas no DataFrame 'global_df_itens'. "
+            "Por exemplo: "
+            "'global_df_itens[\"DESCRIÇÃO DO PRODUTO/SERVIÇO\"].value_counts().idxmax()', "
+            "'global_df_itens.groupby(\"DESCRIÇÃO DO PRODUTO/SERVIÇO\")[\"QUANTIDADE\"].sum().idxmax()', "
+            "'global_df_itens[global_df_itens[\"VALOR UNITÁRIO\"] < 5].shape[0]'. "
+            "Lembre-se de usar 'global_df_itens' e os nomes corretos das colunas: "
+            "'DESCRIÇÃO DO PRODUTO/SERVIÇO', 'QUANTIDADE', 'VALOR UNITÁRIO', etc."
+        )
     )
 ]
 
