@@ -121,11 +121,10 @@ Isso abrirá automaticamente uma nova aba no seu navegador padrão (geralmente e
 Ao abrir a interface no seu navegador:
 
 ### Carregue os Dados Primeiro: 
-    Na caixa de texto, digite: Carregar os dados dos arquivos CSV. e clique em "Perguntar". Aguarde a confirmação de que os dados foram carregados na memória. Esta etapa é fundamental para que o agente possa acessar as informações.
+Na caixa de texto, digite: Carregar os dados dos arquivos CSV. e clique em "Perguntar". Aguarde a confirmação de que os dados foram carregados na memória. Esta etapa é fundamental para que o agente possa acessar as informações.
 ### Faça suas Perguntas: 
-    Após a confirmação do carregamento, comece a interagir com o agente fazendo perguntas em linguagem natural sobre os dados das notas fiscais.
+Após a confirmação do carregamento, comece a interagir com o agente fazendo perguntas em linguagem natural sobre os dados das notas fiscais.
 ### Aqui estão alguns exemplos de perguntas que você pode fazer:
-
     - Qual o fornecedor que teve maior montante recebido?
     - Qual item teve maior volume entregue (em quantidade)?
     - Quantas notas fiscais foram emitidas?
