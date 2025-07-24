@@ -1,6 +1,6 @@
 # 🤖 Agente de Consulta de Notas Fiscais (CSV)
 
-Este projeto implementa um agente de Inteligência Artificial usando o framework [LangChain](https://www.langchain.com/) e modelos [Gemini da Google](https://ai.google.dev/),[Chat- GPT](https://platform.openai.com/) para permitir que usuários façam perguntas em linguagem natural sobre dados contidos em arquivos CSV de notas fiscais. A solução inclui uma interface web simples construída com [Streamlit](https://streamlit.io/).
+Este projeto implementa um agente de Inteligência Artificial usando o framework [LangChain](https://www.langchain.com/) e modelos [Gemini da Google](https://ai.google.dev/), [Chat- GPT](https://platform.openai.com/) para permitir que usuários façam perguntas em linguagem natural sobre dados contidos em arquivos CSV de notas fiscais. A solução inclui uma interface web simples construída com [Streamlit](https://streamlit.io/).
 
 ---
 
