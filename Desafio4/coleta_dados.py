@@ -10,7 +10,7 @@ from datetime import datetime
 
 # Define o LLM que o agente irá usar
 # Substitua pela sua chave de API
-llm = GoogleGenerativeAI(model="gemini-2.5-flash", api_key="AIzaSyBd2mGjnCKwjnycz-xSZeLZ2gP-uYjFq4s")
+llm = GoogleGenerativeAI(model="gemini-2.5-flash", api_key="put-your-api-key-here")
 
 @tool
 def ler_e_processar_csv(file_path: str) -> str:

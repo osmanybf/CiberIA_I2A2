@@ -9,7 +9,7 @@ import re
 from pydantic import BaseModel, Field
 
 # Define o LLM que o agente irá usar UMA ÚNICA VEZ
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", api_key="AIzaSyBd2mGjnCKwjnycz-xSZeLZ2gP-uYjFq4s")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", api_key="put-your-api-key-here")
 
 # --- Ferramentas (Tools) ---
 @tool
