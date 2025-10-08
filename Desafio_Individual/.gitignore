@@ -1,0 +1,45 @@
+# =====================================
+# 🔐 SEGURANÇA
+# =====================================
+.env                  # nunca subir chaves de API ou variáveis locais
+*.key
+*.pem
+
+# =====================================
+# 🧠 DADOS / ARQUIVOS GERADOS
+# =====================================
+data/                 # datasets e CSVs locais
+*.csv
+*.zip
+*.json
+*.xlsx
+*.png                 # gráficos gerados durante a execução
+*.jpg
+*.jpeg
+
+# =====================================
+# 🧰 PYTHON
+# =====================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# =====================================
+# ⚙️ AMBIENTE / DEPENDÊNCIAS
+# =====================================
+.venv/
+venv/
+env/
+ENV/
+.idea/
+.vscode/
+.DS_Store
+
+# =====================================
+# 📦 STREAMLIT E LOGS
+# =====================================
+.streamlit/
+logs/
