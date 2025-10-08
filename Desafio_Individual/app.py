@@ -39,11 +39,12 @@ if uploaded_file and st.session_state.file_loaded != uploaded_file.name:
     
     # 3. Informa o agente para carregar o arquivo
     with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
-        # Limpa arquivos png antigos
-        for file in os.listdir():
+        # Limpa arquivos png antigos do diretório 'data/pngs'
+        png_dir = os.path.join("data", "pngs")
+        os.makedirs(png_dir, exist_ok=True)
+        for file in os.listdir(png_dir):
             if file.endswith(".png"):
-                os.remove(file)
-                
+                os.remove(os.path.join(png_dir, file))
         # Usa o caminho seguro no comando
         result = agent.run(f"Carregue o arquivo {file_path_safe}")
     
@@ -71,6 +72,7 @@ if st.button("Enviar Pergunta"):
         st.write(response)
 
         # Mostra imagens geradas (gráficos)
-        for file in os.listdir():
+        png_dir = os.path.join("data", "pngs")
+        for file in os.listdir(png_dir):
             if file.endswith(".png"):
-                st.image(file, caption=file)
+                st.image(os.path.join(png_dir, file), caption=file)
