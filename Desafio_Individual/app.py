@@ -38,15 +38,15 @@ if uploaded_file and st.session_state.file_loaded != uploaded_file.name:
     file_path_safe = file_path_local.replace(os.path.sep, '/')
     
     # 3. Informa o agente para carregar o arquivo
-    with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
-        # Limpa arquivos png antigos do diretório 'data/pngs'
-        png_dir = os.path.join("data", "pngs")
-        os.makedirs(png_dir, exist_ok=True)
-        for file in os.listdir(png_dir):
-            if file.endswith(".png"):
-                os.remove(os.path.join(png_dir, file))
+    # with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
+    #     # Limpa arquivos png antigos do diretório 'data/pngs'
+    #     png_dir = os.path.join("data", "pngs")
+    #     os.makedirs(png_dir, exist_ok=True)
+    #     for file in os.listdir(png_dir):
+    #         if file.endswith(".png"):
+    #             os.remove(os.path.join(png_dir, file))
         # Usa o caminho seguro no comando
-        result = agent.run(f"Carregue o arquivo {file_path_safe}")
+    result = agent.run(f"Carregue o arquivo {file_path_safe}")
     
     # 4. Atualiza o estado e o histórico de chat
     st.session_state.file_loaded = uploaded_file.name
