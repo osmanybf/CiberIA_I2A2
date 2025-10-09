@@ -217,12 +217,12 @@ agent_kwargs = {
     "prefix": CUSTOM_PREFIX
 }
 
-def get_agent(api_key):
+def get_agent(api_key, model="gemini-2.5-flash"):
     """
-    Inicializa o agente Gemini usando a API KEY fornecida.
+    Inicializa o agente Gemini usando a API KEY e o modelo fornecidos.
     """
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model=model,
         temperature=0.3,
         api_key=api_key
     )
