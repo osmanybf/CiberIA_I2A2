@@ -1,28 +1,40 @@
 import streamlit as st
-from agent_gemini import get_agent
+from agent_gemini import get_agent, get_available_models
 import os
 
-# Modelos disponíveis
-MODELOS_GEMINI = [
-    "gemini-1.0-pro",
-    "gemini-1.5-flash",
-    "gemini-2.5-flash"
-]
+# =============================
+# Função para consultar modelos disponíveis
+# =============================
+def consultar_modelos(api_key):
+    try:
+        modelos = get_available_models(api_key)
+        if not modelos:
+            return ["gemini-2.5-flash"]
+        return modelos
+    except Exception:
+        return ["gemini-2.5-flash"]
 
-# Tela de login
+# =============================
+# TELA DE LOGIN
+# =============================
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-    st.title("Login")
-    nome = st.text_input("Digite seu nome")
-    api_key = st.text_input("Digite sua API KEY do Gemini", type="password")
-    if st.button("Entrar"):
-        if nome and api_key:
-            st.session_state["nome"] = nome
-            st.session_state["api_key"] = api_key
-            st.session_state["logged_in"] = True
-            st.rerun()
-        else:
-            st.warning("Preencha todos os campos para continuar.")
-    st.stop()
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.image(os.path.join("data", "img", "logo.png"), width=180)
+        st.title("Login")
+        nome = st.text_input("Digite seu nome")
+        api_key = st.text_input("Digite sua API KEY do Gemini", type="password")
+        if st.button("Entrar"):
+            if nome and api_key:
+                st.session_state["nome"] = nome
+                st.session_state["api_key"] = api_key
+                st.session_state["logged_in"] = True
+                # Consulta os modelos disponíveis para este usuário
+                st.session_state["modelos_gemini"] = consultar_modelos(api_key)
+                st.rerun()
+            else:
+                st.warning("Preencha todos os campos para continuar.")
+        st.stop()
 
 st.set_page_config(page_title="Agente CiberIA", page_icon="🤖", layout="wide")
 
@@ -40,8 +52,9 @@ if "messages" not in st.session_state:
 if "file_loaded" not in st.session_state:
     st.session_state.file_loaded = None
 
-# Combo para seleção do modelo
-modelo_selecionado = st.selectbox("Selecione o modelo Gemini:", MODELOS_GEMINI, index=2)
+# Combo para seleção do modelo (preenchido após login)
+modelos_gemini = st.session_state.get("modelos_gemini", ["gemini-2.5-flash"])
+modelo_selecionado = st.selectbox("Selecione o modelo Gemini:", modelos_gemini, index=0)
 st.session_state["modelo_gemini"] = modelo_selecionado
 
 # Inicializa o agente Gemini com a API KEY e modelo do usuário
@@ -67,7 +80,7 @@ if uploaded_file and st.session_state.file_loaded != uploaded_file.name:
     
     # 3. Informa o agente para carregar o arquivo
     with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
-        png_dir = os.path.join("data", "pngs")
+        png_dir = os.path.join("data")
         os.makedirs(png_dir, exist_ok=True)
         for file in os.listdir(png_dir):
             if file.endswith(".png"):
@@ -92,11 +105,17 @@ if st.button("Enviar Pergunta"):
     if query.strip() == "":
         st.warning("Digite uma pergunta primeiro.")
     else:
+        # Limpa todos os PNGs do diretório 'data' antes de gerar novo gráfico
+        data_dir = os.path.join("data")
+        for file in os.listdir(data_dir):
+            if file.endswith(".png"):
+                os.remove(os.path.join(data_dir, file))
+
         response = agent.run(query)
         st.write("### Resposta:")
         st.write(response)
 
-        png_dir = os.path.join("data", "pngs")
-        for file in os.listdir(png_dir):
+        # Exibe apenas o(s) gráfico(s) gerado(s) na resposta atual
+        for file in os.listdir(data_dir):
             if file.endswith(".png"):
-                st.image(os.path.join(png_dir, file), caption=file)
+                st.image(os.path.join(data_dir, file), caption=file)

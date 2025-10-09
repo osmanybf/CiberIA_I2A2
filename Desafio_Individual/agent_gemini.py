@@ -5,10 +5,12 @@ load_dotenv()  # 🔹 Carrega variáveis de ambiente (.env)
 from langchain.agents import initialize_agent, Tool
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
+import google.generativeai as genai
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import requests
 
 # ==============================================
 # 🔹 VARIÁVEL GLOBAL DE DATAFRAME
@@ -58,7 +60,9 @@ def plot_distribution(column: str):
         plt.figure(figsize=(8, 5))
         sns.histplot(data_to_plot, kde=True, bins=30)
         plt.title(f"Distribuição da coluna: {column}")
-        path = f"distribution_{column}.png"
+        data_dir = os.path.join("data")
+        os.makedirs(data_dir, exist_ok=True)
+        path = os.path.join(data_dir, f"distribution_{column}.png")
         plt.savefig(path)
         plt.close()
         return f"Gráfico salvo em {path}"
@@ -82,7 +86,9 @@ def correlation_matrix(query: str = None): # 🎯 CORREÇÃO 1: Aceita argumento
     plt.figure(figsize=(10, 8))
     sns.heatmap(corr, cmap='coolwarm', annot=False)
     plt.title("Matriz de Correlação")
-    path = "correlation_matrix.png"
+    data_dir = os.path.join("data")
+    os.makedirs(data_dir, exist_ok=True)
+    path = os.path.join(data_dir, "correlation_matrix.png")
     plt.savefig(path)
     plt.close()
     return f"Gráfico de correlação salvo em {path}"
@@ -134,7 +140,9 @@ def plot_scatter(column_x: str, column_y: str):
         plt.title(f"Dispersão entre {column_x} e {column_y}")
         plt.xlabel(column_x)
         plt.ylabel(column_y)
-        path = f"scatter_{column_x}_vs_{column_y}.png"
+        data_dir = os.path.join("data")
+        os.makedirs(data_dir, exist_ok=True)
+        path = os.path.join(data_dir, f"scatter_{column_x}_vs_{column_y}.png")
         plt.savefig(path)
         plt.close()
         return f"Gráfico de dispersão salvo em {path}"
@@ -176,7 +184,9 @@ def plot_cluster(column_x: str, column_y: str, n_clusters: int = 3):
         plt.title(f"Agrupamento K-Means ({n_clusters} Clusters) em {column_x} vs {column_y}")
         plt.xlabel(column_x)
         plt.ylabel(column_y)
-        path = f"cluster_{column_x}_vs_{column_y}_{n_clusters}.png"
+        data_dir = os.path.join("data")
+        os.makedirs(data_dir, exist_ok=True)
+        path = os.path.join(data_dir, f"cluster_{column_x}_vs_{column_y}_{n_clusters}.png")
         plt.savefig(path)
         plt.close()
         return f"Gráfico de agrupamento salvo em {path}"
@@ -237,3 +247,18 @@ def get_agent(api_key, model="gemini-2.5-flash"):
         handle_parsing_errors=True
     )
     return agent
+
+def get_available_models(api_key):
+    """
+    Consulta os modelos Gemini disponíveis para o usuário via API KEY.
+    Retorna uma lista de modelos disponíveis.
+    """
+
+    genai.configure(api_key=api_key)
+    try:
+        models = genai.list_models()
+        modelos = [m.name for m in models if "gemini" in m.name]
+        return modelos if modelos else ["gemini-2.5-flash"]
+    except Exception as e:
+        print(f"Erro ao consultar modelos Gemini: {e}")
+        return ["gemini-2.5-flash"]
