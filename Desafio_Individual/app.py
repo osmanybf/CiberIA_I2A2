@@ -24,10 +24,10 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
             st.warning("Preencha todos os campos para continuar.")
     st.stop()
 
-st.set_page_config(page_title="Agente EDA - Gemini", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Agente CiberIA", page_icon="🤖", layout="wide")
 
-st.title("🤖 Agente Autônomo de EDA com Gemini")
-st.write("Envie um arquivo CSV, escolha o modelo Gemini e faça perguntas sobre os dados!")
+st.title("🤖 Agente Autônomo - Gemini")
+st.write("Escolha o modelo Gemini, faça o upload do arquivo CSV e realize perguntas sobre os dados!")
 
 # =============================
 # INICIALIZAÇÃO DE ESTADO E CHAT
@@ -36,8 +36,7 @@ st.write("Envie um arquivo CSV, escolha o modelo Gemini e faça perguntas sobre 
 if "messages" not in st.session_state:
     st.session_state.messages = []
     
-# ✅ CORREÇÃO: Inicializa a variável 'file_loaded'
-# Se a chave 'file_loaded' não existir, inicialize-a com None.
+
 if "file_loaded" not in st.session_state:
     st.session_state.file_loaded = None
 
