@@ -203,9 +203,6 @@ tools = [
 
 ]
 
-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-
-
 # 🎯 CORREÇÃO 2: Prefixo para evitar alucinação de carregamento
 CUSTOM_PREFIX = """Você é um Agente de Análise Exploratória de Dados (EDA). Seu objetivo é ajudar o usuário a analisar o DataFrame que JÁ ESTÁ CARREGADO na memória global ('df').
 
@@ -220,20 +217,23 @@ agent_kwargs = {
     "prefix": CUSTOM_PREFIX
 }
 
-
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    temperature=0.3
-)
-
-
-agent = initialize_agent(
-    tools,
-    llm,
-    agent_type="conversational-react-description",
-    memory=memory,
-    verbose=True,
-    agent_kwargs=agent_kwargs,
-    # 🎯 CORREÇÃO FINAL: Permite que o agente se recupere de erros de formatação
-    handle_parsing_errors=True 
-)
+def get_agent(api_key):
+    """
+    Inicializa o agente Gemini usando a API KEY fornecida.
+    """
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.3,
+        api_key=api_key
+    )
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    agent = initialize_agent(
+        tools,
+        llm,
+        agent_type="conversational-react-description",
+        memory=memory,
+        verbose=True,
+        agent_kwargs=agent_kwargs,
+        handle_parsing_errors=True
+    )
+    return agent
