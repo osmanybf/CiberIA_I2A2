@@ -1,6 +1,21 @@
 import streamlit as st
-from agent_gemini import agent
+from agent_gemini import get_agent
 import os
+
+# Tela de login
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.title("Login")
+    nome = st.text_input("Digite seu nome")
+    api_key = st.text_input("Digite sua API KEY do Gemini", type="password")
+    if st.button("Entrar"):
+        if nome and api_key:
+            st.session_state["nome"] = nome
+            st.session_state["api_key"] = api_key
+            st.session_state["logged_in"] = True
+            st.rerun()
+        else:
+            st.warning("Preencha todos os campos para continuar.")
+    st.stop()
 
 st.set_page_config(page_title="Agente EDA - Gemini 2.5 Flash", page_icon="🤖", layout="wide")
 
@@ -17,8 +32,12 @@ if "messages" not in st.session_state:
 # ✅ CORREÇÃO: Inicializa a variável 'file_loaded'
 # Se a chave 'file_loaded' não existir, inicialize-a com None.
 if "file_loaded" not in st.session_state:
-    st.session_state.file_loaded = None # <-- Esta linha estava faltando ou incorreta!
+    st.session_state.file_loaded = None
 
+# Inicializa o agente Gemini com a API KEY do usuário
+if "agent" not in st.session_state:
+    st.session_state.agent = get_agent(st.session_state["api_key"])
+agent = st.session_state.agent
 
 # =============================
 # UPLOAD DE ARQUIVO
@@ -26,33 +45,28 @@ if "file_loaded" not in st.session_state:
 uploaded_file = st.file_uploader("Selecione o arquivo CSV", type="csv")
 
 if uploaded_file and st.session_state.file_loaded != uploaded_file.name:
-    
     # 1. Salva o arquivo localmente
     os.makedirs("data", exist_ok=True)
     file_path_local = os.path.join("data", uploaded_file.name)
     with open(file_path_local, "wb") as f:
         f.write(uploaded_file.getvalue())
 
-    # 2. ✅ CORREÇÃO: Padroniza o caminho para usar barras frontais ('/')
-    # Isso evita problemas de 'escape' de caracteres ao enviar o caminho para o agente.
+    # 2. Padroniza o caminho para usar barras frontais ('/')
     file_path_safe = file_path_local.replace(os.path.sep, '/')
     
     # 3. Informa o agente para carregar o arquivo
-    # with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
-    #     # Limpa arquivos png antigos do diretório 'data/pngs'
-    #     png_dir = os.path.join("data", "pngs")
-    #     os.makedirs(png_dir, exist_ok=True)
-    #     for file in os.listdir(png_dir):
-    #         if file.endswith(".png"):
-    #             os.remove(os.path.join(png_dir, file))
-        # Usa o caminho seguro no comando
-    result = agent.run(f"Carregue o arquivo {file_path_safe}")
+    with st.spinner(f"Carregando {uploaded_file.name} e resetando a memória do agente..."):
+        png_dir = os.path.join("data", "pngs")
+        os.makedirs(png_dir, exist_ok=True)
+        for file in os.listdir(png_dir):
+            if file.endswith(".png"):
+                os.remove(os.path.join(png_dir, file))
+        result = agent.run(f"Carregue o arquivo {file_path_safe}")
     
     # 4. Atualiza o estado e o histórico de chat
     st.session_state.file_loaded = uploaded_file.name
     st.session_state.messages.clear()
     
-    # Adiciona a confirmação de carregamento ao chat
     st.session_state.messages.append({"role": "assistant", "content": result, "image_path": None})
     st.toast(f"✅ Arquivo '{uploaded_file.name}' carregado com sucesso!")
     st.rerun()
@@ -71,7 +85,6 @@ if st.button("Enviar Pergunta"):
         st.write("### Resposta:")
         st.write(response)
 
-        # Mostra imagens geradas (gráficos)
         png_dir = os.path.join("data", "pngs")
         for file in os.listdir(png_dir):
             if file.endswith(".png"):
