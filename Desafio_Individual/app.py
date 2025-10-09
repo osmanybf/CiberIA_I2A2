@@ -2,6 +2,13 @@ import streamlit as st
 from agent_gemini import get_agent
 import os
 
+# Modelos disponíveis
+MODELOS_GEMINI = [
+    "gemini-1.0-pro",
+    "gemini-1.5-flash",
+    "gemini-2.5-flash"
+]
+
 # Tela de login
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.title("Login")
@@ -17,10 +24,10 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
             st.warning("Preencha todos os campos para continuar.")
     st.stop()
 
-st.set_page_config(page_title="Agente EDA - Gemini 2.5 Flash", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Agente EDA - Gemini", page_icon="🤖", layout="wide")
 
-st.title("🤖 Agente Autônomo de EDA com Gemini 2.5 Flash")
-st.write("Envie um arquivo CSV e faça perguntas sobre os dados!")
+st.title("🤖 Agente Autônomo de EDA com Gemini")
+st.write("Envie um arquivo CSV, escolha o modelo Gemini e faça perguntas sobre os dados!")
 
 # =============================
 # INICIALIZAÇÃO DE ESTADO E CHAT
@@ -34,9 +41,14 @@ if "messages" not in st.session_state:
 if "file_loaded" not in st.session_state:
     st.session_state.file_loaded = None
 
-# Inicializa o agente Gemini com a API KEY do usuário
-if "agent" not in st.session_state:
-    st.session_state.agent = get_agent(st.session_state["api_key"])
+# Combo para seleção do modelo
+modelo_selecionado = st.selectbox("Selecione o modelo Gemini:", MODELOS_GEMINI, index=2)
+st.session_state["modelo_gemini"] = modelo_selecionado
+
+# Inicializa o agente Gemini com a API KEY e modelo do usuário
+if "agent" not in st.session_state or st.session_state.get("modelo_gemini_last") != modelo_selecionado:
+    st.session_state.agent = get_agent(st.session_state["api_key"], modelo_selecionado)
+    st.session_state["modelo_gemini_last"] = modelo_selecionado
 agent = st.session_state.agent
 
 # =============================
